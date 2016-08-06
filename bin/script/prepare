@@ -1,0 +1,10 @@
+#!/bin/bash
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates
+sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" > docker.list
+sudo mv docker.list /etc/apt/source.list.d/
+docker run -d -p 8083:8083 -p 8086:8086  -v $PWD/influxdb:/var/lib/influxdb --name influxdb influxdb
+docker run -d -p 3000:3000 -e "GF_SECURITY_ADMIN_PASSWORD=password1234" --name grafana grafana
+wget https://dl.influxdata.com/telegraf/releases/telegraf_0.13.1_amd64.deb
+sudo dpkg -i telegraf_0.13.1_amd64.deb
